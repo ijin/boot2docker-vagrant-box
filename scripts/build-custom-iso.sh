@@ -44,6 +44,10 @@ done
 # Add option to the /opt/bootlocal.sh script
 echo "/usr/local/etc/init.d/nfs-client start" | tee -a "${EXTRACT_DIR}/opt/bootlocal.sh"
 
+# Download testing Docker binary
+curl -L -o "${EXTRACT_DIR}/usr/local/bin/docker" "https://test.docker.com/builds/Linux/x86_64/docker-1.7.0-rc1"
+chmod a+x "${EXTRACT_DIR}/usr/local/bin/docker"
+
 # Generate the new initrd.img in new iso dir
 cd "${EXTRACT_DIR}"
 find | cpio -o -H newc | xz -9 --format=lzma > "${NEW_ISO_DIR}/boot/initrd.img"

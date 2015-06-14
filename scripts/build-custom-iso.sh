@@ -17,6 +17,9 @@ su -c "tce-load -wi mkisofs-tools.tcz" docker
 su -c "tce-load -wi syslinux.tcz" docker
 
 # Extract the initrd.img (Linux root filesystem) from the iso
+curl -L -o ${B2D_ISO_PATH} https://github.com/boot2docker/boot2docker/releases/download/v1.6.2/boot2docker.iso
+ls -al /tmp
+md5sum /tmp/boot2docker-orig.iso
 mount "${B2D_ISO_PATH}" "${MNT_TMP_DIR}" -o loop,ro
 cp -a "${MNT_TMP_DIR}/boot" "${NEW_ISO_DIR}/"
 cp -a "${MNT_TMP_DIR}/version" "${NEW_ISO_DIR}/"

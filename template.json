@@ -1,9 +1,11 @@
 {
     "push": {
-        "name": "dduportal/boot2docker"
+        "name": "ijin/boot2docker"
     },
     "variables": {
-        "B2D_ISO_FILE": "boot2docker.iso",
+        "atlas_token": "{{env `ATLAS_TOKEN`}}",
+        "version": "1.6.2",
+        "B2D_ISO_FILE": "https://github.com/boot2docker/boot2docker/releases/download/v1.6.2/boot2docker.iso",
         "B2D_ISO_CHECKSUM": "7d8c43f57d04a250696129221c23cc18"
     },
     "builders": [{
@@ -47,11 +49,6 @@
     }],
     "provisioners": [
         {
-            "type": "file",
-            "source": "boot2docker.iso",
-            "destination": "/tmp/boot2docker-orig.iso"
-        },
-        {
             "type": "shell",
             "execute_command": "{{ .Vars }} sudo -E -S sh '{{ .Path }}'",
             "scripts": [
@@ -60,9 +57,19 @@
             ]
         }
     ],
-    "post-processors": [{
-        "type": "vagrant",
-        "vagrantfile_template": "vagrantfile.tpl",
-        "output": "boot2docker_{{.Provider}}.box"
-    }]
+    "post-processors": [
+	[
+            {
+                "type": "vagrant",
+        	"vagrantfile_template": "vagrantfile.tpl",
+        	"output": "boot2docker_{{.Provider}}.box"
+    	        },
+            {
+                "type": "vagrant-cloud",
+                "box_tag": "ijin/boot2docker",
+    	        "access_token": "{{user `atlas_token`}}",
+    	        "version": "{{user `version`}}"
+            }
+	]
+    ]
 }
